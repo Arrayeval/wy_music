@@ -11,7 +11,7 @@ import AntIonicons from 'react-native-vector-icons/AntDesign'
 import FindList from '../components/FindList'
 import Video from '../components/Video'
 import MyProfile from '../components/Account'
-import Friends from '../components/Account'
+import Friends from '../components/Friends'
 import Account from '../components/Account'
 
 

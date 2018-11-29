@@ -24,8 +24,8 @@ export default class FindList extends React.Component {
                     <ScrollableTabView 
                         ref = 'tabView'
                         tabBarTextStyle = {{fontSize:16}}
-                        renderTabBar = {() => <ScrollableTabBar style={{borderBottomWidth:0, paddingBottom:5, width: screenWidth}} />}
-                        tabBarUnderlineStyle =  {{height:2, backgroundColor:'#fff', }}
+                        renderTabBar = {() => <ScrollableTabBar style={{borderBottomWidth:0, paddingBottom:5, width: screenWidth , backgroundColor:'rgb(200,51,49)'}} />}
+                        tabBarUnderlineStyle =  {{height:2, backgroundColor:'#fff' }}
                         tabBarBackgroundColor ={'rgb(200,51,49)'}
                         tabBarActiveTextColor = {'#fff'}
                         tabBarInactiveTextColor = {'#fff'}

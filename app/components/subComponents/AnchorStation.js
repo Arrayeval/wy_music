@@ -21,10 +21,10 @@ export default class AnchorStation extends React.Component {
                     autoplay: true
                 },
                 modulePartConfig: [
-                    {id: 0, name: '私人FM', icon: 'md-radio', navUrl: 'ssss'},
-                    {id: 1, name: '每日推荐', icon: 'ios-calendar', navUrl: 'ssss'},
-                    {id: 2, name: '歌单', icon: 'ios-musical-note', navUrl: 'ssss'},
-                    {id: 3, name: '排行榜', icon: 'ios-stats', navUrl: 'ssss'},
+                    {id: 0, name: '电台分类', icon: 'md-radio', navUrl: 'ssss'},
+                    {id: 1, name: '电台排行', icon: 'ios-calendar', navUrl: 'ssss'},
+                    {id: 2, name: 'DJ电台', icon: 'ios-musical-note', navUrl: 'ssss'},
+                    {id: 3, name: '小冰电台', icon: 'ios-stats', navUrl: 'ssss'},
                 ]
             },
         }

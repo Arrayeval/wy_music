@@ -17,15 +17,17 @@ export default class FindList extends React.Component {
     render () {
         return (
             <View>
-                <View style={styles.topSearch}>
+                {/* 头部搜索 */}
+                <View style={styles.topSearchWrapper}>
                     <Search/>
                 </View>
-                <View style={styles.contentContainer}>
+                {/* 中间轮播 */}
+                <View style={styles.contentMiddleWrapper}>
                     <ScrollableTabView 
                         ref = 'tabView'
                         tabBarTextStyle = {{fontSize:16}}
-                        renderTabBar = {() => <ScrollableTabBar style={{borderBottomWidth:0, paddingBottom:5, width: screenWidth , backgroundColor:'rgb(200,51,49)'}} />}
-                        tabBarUnderlineStyle =  {{height:2, backgroundColor:'#fff' }}
+                        renderTabBar = {() => <ScrollableTabBar style={styles.scrollableTabBar} />}
+                        tabBarUnderlineStyle =  {styles.tabBarUnderlineStyle}
                         tabBarBackgroundColor ={'rgb(200,51,49)'}
                         tabBarActiveTextColor = {'#fff'}
                         tabBarInactiveTextColor = {'#fff'}
@@ -33,9 +35,13 @@ export default class FindList extends React.Component {
                         locked={false}
                         prerenderingSiblingsNumber={1}
                     >
-                        <AnchorStation key={pageConFig.tabViewArr[0].itemName}  tabLabel = {pageConFig.tabViewArr[0].itemName}/>
-                        <PersonRecommend key={pageConFig.tabViewArr[1].itemName} tabLabel = {pageConFig.tabViewArr[1].itemName}/>
+                        <PersonRecommend key={pageConFig.tabViewArr[1].itemName} tabLabel = {pageConFig.tabViewArr[0].itemName}/>
+                        <AnchorStation key={pageConFig.tabViewArr[0].itemName}  tabLabel = {pageConFig.tabViewArr[1].itemName}/>
                     </ScrollableTabView>
+                </View>
+                {/* 列表 */}
+                <View style={styles.contentListWrappper}>
+
                 </View>
             </View>
         )
@@ -43,13 +49,26 @@ export default class FindList extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    topSearch:{
+    topSearchWrapper:{
         backgroundColor:'rgb(200,51,49)'
     },
-    contentContainer:{
+    contentMiddleWrapper:{
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
         height:500
-    }  
+    },
+    scrollableTabBar:{
+        borderBottomWidth:0, 
+        paddingBottom:5, 
+        width: screenWidth , 
+        backgroundColor:'rgb(200,51,49)'
+    },
+    tabBarUnderlineStyle:{
+        height:2,
+        backgroundColor:'#fff'
+    },
+    contentListWrappper:{
+        
+    }
 })

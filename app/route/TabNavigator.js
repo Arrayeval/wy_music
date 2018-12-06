@@ -94,7 +94,7 @@ export default MainTab = createBottomTabNavigator (
       activeTintColor:'#d81e06', // label和icon的前景色 活跃状态下（选中）。
       inactiveTintColor:'#515151', // label和icon的前景色 不活跃状态下(未选中)。
       labelStyle:{
-          fontSize: 10,
+        fontSize: 10,
       }, //label的样式。
       iconStyle:{
         paddingTop:10,
@@ -104,15 +104,15 @@ export default MainTab = createBottomTabNavigator (
 )
 const styles = StyleSheet.create({
     navigatorTitle:{
-        fontSize:20,
-        color:'white',
+      fontSize:20,
+      color:'white',
     },
     navigator:{
-        backgroundColor:'#d81e06',
+      backgroundColor:'#d81e06',
     },
     tabbarImage:{
-        width:25,
-        height:25,
-        marginBottom:-3,
+      width:25,
+      height:25,
+      marginBottom:-3,
     },
   })

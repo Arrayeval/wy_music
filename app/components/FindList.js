@@ -16,7 +16,7 @@ export default class FindList extends React.Component {
     pageConFig = require('../modules/FindListConfig')
     render () {
         return (
-            <View>
+            <View style={styles.outerContainer}> 
                 {/* 头部搜索 */}
                 <View style={styles.topSearchWrapper}>
                     <Search/>
@@ -39,10 +39,6 @@ export default class FindList extends React.Component {
                         <AnchorStation key={pageConFig.tabViewArr[0].itemName}  tabLabel = {pageConFig.tabViewArr[1].itemName}/>
                     </ScrollableTabView>
                 </View>
-                {/* 列表 */}
-                <View style={styles.contentListWrappper}>
-
-                </View>
             </View>
         )
     }
@@ -55,8 +51,9 @@ const styles = StyleSheet.create({
     contentMiddleWrapper:{
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-        height:500
+        backgroundColor: '#FFF',
+        height:screenHeight,
+        paddingBottom:130
     },
     scrollableTabBar:{
         borderBottomWidth:0, 

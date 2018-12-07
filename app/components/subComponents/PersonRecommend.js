@@ -3,6 +3,9 @@ import React, {PureComponent} from 'react'
 import {View, Text, ScrollView, RefreshControl, TouchableOpacity,StyleSheet,Image, Dimensions} from 'react-native'
 import MidlePart from '../../baseComponents/MidlePart'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import apiUrls from '../../apiUrl'
+import fetchReq from '../../utils/fetchReq'
+import commonFun from '../../utils/common'
 import { TapGestureHandler } from 'react-native-gesture-handler';
 const {width: screenWidth, height: screenHeight} =  Dimensions.get('window')
 
@@ -30,14 +33,42 @@ export default class AnchorStation extends React.Component {
                     {id: 3, name: '排行榜', icon: 'ios-stats', navUrl: 'ssss'}
                 ]
             },
+            recommendList: []
         }
     }
     _onRefresh = () => {
-        this.setState({refreshing: TapGestureHandler});
+        this.setState({refreshing: true});
         setTimeout(() => {
             this.setState({refreshing: false});
         },200)        
     }
+
+    componentDidMount () {
+        // fetchReq.get(apiUrls.recommendList, {id: 1}).then((res) => {
+        //    if (res.code === 200) {
+        //     let _tmpArr = commonFun.splitArr(res.playlists, 3)
+        //     this.setState({recommendList: _tmpArr})
+        //    }
+        // }).catch(err => {
+        //     alert("err")   
+        //     console.log(err)
+        // })
+         this._getListData()
+    }
+
+    _getListData = () => {
+        fetch ("http://www.mptab.cn:3001/related/playlist?id=1") 
+        .then((response) => response.json()).then((res) => {
+            if (res.code === 200) {
+             let _tmpArr = commonFun.splitArr(res.playlists, 3)
+             this.setState({recommendList: _tmpArr})
+            }
+         }).catch(err => {
+             alert("err")   
+             console.log(err)
+         })
+    }
+
     render () {
         return (
             <View style={styles.mainContainer}>
@@ -60,119 +91,73 @@ export default class AnchorStation extends React.Component {
                         {/*推荐歌单*/}
                         <View style={styles.itemWrapper}>
                             <View style={styles.titleNav}>
-                                <Text style={styles.navSty}>推荐歌单</Text>
+                                <Text style={styles.navSty} onClick={this._getListData.bind(this)}>推荐歌单</Text>
+                                <Icon style={styles.navIcon} name="chevron-right" size={23}/>
+                            </View>
+                            {/* <View style={styles.partWrapper}>
+                                <View style={styles.partItem} >
+                                    <Image style={styles.itemImage} source={{uri:"http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg"}}></Image>
+                                    <Text style={styles.itemDes} numberOfLines = {2}>夏日炎凉、春风和睦、秋风爽、北国风光，雪飘万里</Text>
+                                </View>
+                                <View style={styles.partItem} >
+                                    <Image style={styles.itemImage} source={{uri:"http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg"}}></Image>
+                                    <Text style={styles.itemDes} numberOfLines = {2}>夏日炎凉、春风和睦、秋风爽、北国风光，雪飘万里</Text>
+                                </View>
+                                <View style={styles.partItem} >
+                                    <Image style={styles.itemImage} source={{uri:"http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg"}}></Image>
+                                    <Text style={styles.itemDes} numberOfLines = {2}>夏日炎凉、春风和睦、秋风爽、北国风光，雪飘万里</Text>
+                                </View>
+                            </View> */}
+                            {
+                                this.state.recommendList.map((item, index) => (
+                                    <View style={styles.partWrapper} key={index}>
+                                        {
+                                            item.map((val, key) => 
+                                                (
+                                                    <View style={styles.partItem} key={key}>
+                                                        <Image style={styles.itemImage} source={{uri:"http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg"}}></Image>
+                                                        <Text style={styles.itemDes} numberOfLines = {2}>夏日炎凉、春风和睦、秋风爽、北国风光，雪飘万里</Text>
+                                                    </View>
+                                                )
+                                            )
+                                        }
+                                    </View>
+                                    )
+                                )
+                            }  
+                        </View>
+                        {/*最新音乐*/}
+                        <View style={styles.itemWrapper}>
+                            <View style={styles.titleNav}>
+                                <Text style={styles.navSty}>最新音乐</Text>
                                 <Icon style={styles.navIcon} name="chevron-right" size={23}/>
                             </View>
                             <View style={styles.partWrapper}>
                             <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri:"http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg"}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>夏日炎凉、春风和睦、秋风爽、北国风光，雪飘万里</Text>
+                                <Image style={styles.itemImage} source={{uri:"http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg"}}></Image>
+                                <Text style={styles.itemDes} numberOfLines = {2}>夏日炎凉、春风和睦、秋风爽、北国风光，雪飘万里</Text>
                             </View>    
                             <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/lbWdgPKiQouUTY1TPuP47g==/109951163692233243.jpg'}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
+                                <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/lbWdgPKiQouUTY1TPuP47g==/109951163692233243.jpg'}}></Image>
+                                <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
                             </View>    
                             <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/pEov1kba1LJ_bmv-5PCm0Q==/109951163694170445.jpg'}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
-                            </View>    
-                            </View>
-                            <View style={styles.partWrapper}>
-                            <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri:"http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg"}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
-                            </View>    
-                            <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg'}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
-                            </View>    
-                            <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg'}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
+                                <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/pEov1kba1LJ_bmv-5PCm0Q==/109951163694170445.jpg'}}></Image>
+                                <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
                             </View>    
                             </View>
                             <View style={styles.partWrapper}>
                             <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri:"http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg"}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
+                                <Image style={styles.itemImage} source={{uri:"http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg"}}></Image>
+                                <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
                             </View>    
                             <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg'}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
+                                <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg'}}></Image>
+                                <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
                             </View>    
                             <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg'}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
-                            </View>    
-                            </View>
-                            <View style={styles.partWrapper}>
-                            <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri:"http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg"}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
-                            </View>    
-                            <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg'}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
-                            </View>    
-                            <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg'}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
-                            </View>    
-                            </View>
-                            <View style={styles.partWrapper}>
-                            <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri:"http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg"}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
-                            </View>    
-                            <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg'}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
-                            </View>    
-                            <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg'}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
-                            </View>    
-                            </View>
-                            <View style={styles.partWrapper}>
-                            <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri:"http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg"}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
-                            </View>    
-                            <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg'}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
-                            </View>    
-                            <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg'}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
-                            </View>    
-                            </View>
-                            <View style={styles.partWrapper}>
-                            <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri:"http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg"}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
-                            </View>    
-                            <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg'}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
-                            </View>    
-                            <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg'}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
-                            </View>    
-                            </View>
-                            <View style={styles.partWrapper}>
-                            <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri:"http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg"}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
-                            </View>    
-                            <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg'}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
-                            </View>    
-                            <View style={styles.partItem}>
-                                    <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg'}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
+                                <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg'}}></Image>
+                                <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
                             </View>    
                             </View>
                         </View>

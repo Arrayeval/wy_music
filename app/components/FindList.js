@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#FFF',
         height:screenHeight,
-        paddingBottom:130
+        paddingBottom:120
     },
     scrollableTabBar:{
         borderBottomWidth:0, 

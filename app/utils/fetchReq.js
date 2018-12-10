@@ -1,11 +1,11 @@
 
-var queryString = require('query-string')
-var _ = require('lodash')
+const queryString = require('query-string')
+const _ = require('lodash')
 
 var config = require('../config')
-var fetchReq = {}
+const fetchReq = {}
 
-fetchReq.get = (url, params) => {
+fetchReq.get = function (url, params) {
     if (params) {
         url += '?' + queryString.stringify(params)
     }
@@ -13,7 +13,7 @@ fetchReq.get = (url, params) => {
             .then((response) => response.json())
 }
 
-fetchReq.post = (url, body) => {
+fetchReq.post = function (url, body) {
     var options = _.extend(config.header, {
         body: JSON.stringify(body)
     })

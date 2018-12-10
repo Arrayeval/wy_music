@@ -1,4 +1,4 @@
-// 主播电台
+// 主播电台 （of FindList）
 import React, {PureComponent} from 'react'
 import {View, Text, TouchableOpacity,StyleSheet,Image, Dimensions} from 'react-native'
 import MidlePart from '../../baseComponents/MidlePart'

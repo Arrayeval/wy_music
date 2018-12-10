@@ -3,10 +3,9 @@ import React, {PureComponent} from 'react'
 import {View, Text, ScrollView, RefreshControl, TouchableOpacity,StyleSheet,Image, Dimensions} from 'react-native'
 import MidlePart from '../../baseComponents/MidlePart'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import apiUrls from '../../apiUrl'
-import fetchReq from '../../utils/fetchReq'
-import commonFun from '../../utils/common'
-import { TapGestureHandler } from 'react-native-gesture-handler';
+import ApiUrls from '../../apiUrl/index.js'
+import FetchReq from '../../utils/fetchReq'
+import {splitArr} from '../../utils/common'
 const {width: screenWidth, height: screenHeight} =  Dimensions.get('window')
 
 export default class AnchorStation extends React.Component {
@@ -33,7 +32,8 @@ export default class AnchorStation extends React.Component {
                     {id: 3, name: '排行榜', icon: 'ios-stats', navUrl: 'ssss'}
                 ]
             },
-            recommendList: []
+            recommendListArr: [],
+            newMusicListArr: []
         }
     }
     _onRefresh = () => {
@@ -44,29 +44,42 @@ export default class AnchorStation extends React.Component {
     }
 
     componentDidMount () {
-        // fetchReq.get(apiUrls.recommendList, {id: 1}).then((res) => {
-        //    if (res.code === 200) {
-        //     let _tmpArr = commonFun.splitArr(res.playlists, 3)
-        //     this.setState({recommendList: _tmpArr})
-        //    }
-        // }).catch(err => {
-        //     alert("err")   
-        //     console.log(err)
-        // })
-         this._getListData()
+        this._getRecommendMusicListData()
+        this._getRecommendNewMusic()
     }
 
-    _getListData = () => {
-        fetch ("http://www.mptab.cn:3001/related/playlist?id=1") 
-        .then((response) => response.json()).then((res) => {
+    _getRecommendMusicListData = () => {
+        FetchReq.get(ApiUrls.recommendList) 
+        .then((res) => {
             if (res.code === 200) {
-             let _tmpArr = commonFun.splitArr(res.playlists, 3)
-             this.setState({recommendList: _tmpArr})
+                let _tmpArr = []
+                if (res.result.length > 6) { // 取数组中的六个数据源
+                    _tmpArr = splitArr(res.result.slice(0, 6), 3)
+                } else {
+                    _tmpArr = res.result
+                }
+                this.setState({recommendListArr: _tmpArr})
             }
-         }).catch(err => {
-             alert("err")   
-             console.log(err)
-         })
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+
+    _getRecommendNewMusic = () => {
+        FetchReq.get(ApiUrls.recommendNewMusic) 
+        .then((res) => {
+            if (res.code === 200) {
+                let _tmpArr = []
+                if (res.result.length > 6) { // 取数组中的六个数据源
+                    _tmpArr = splitArr(res.result.slice(0, 6), 3)
+                } else {
+                    _tmpArr = res.result
+                }
+                this.setState({newMusicListArr: _tmpArr})
+            }
+        }).catch(err => {
+            console.log(err)
+        })
     }
 
     render () {
@@ -79,8 +92,7 @@ export default class AnchorStation extends React.Component {
                     refreshControl={
                         <RefreshControl
                             refreshing={this.state.refreshing}
-                            onRefresh={this._onRefresh}
-                        />
+                            onRefresh={this._onRefresh}/>
                     }
                     style={styles.scrollViewStyle}
                     showsVerticalScrollIndicator={false}
@@ -91,32 +103,18 @@ export default class AnchorStation extends React.Component {
                         {/*推荐歌单*/}
                         <View style={styles.itemWrapper}>
                             <View style={styles.titleNav}>
-                                <Text style={styles.navSty} onClick={this._getListData.bind(this)}>推荐歌单</Text>
+                                <Text style={styles.navSty} onClick={this._getRecommendMusicListData.bind(this)}>推荐歌单</Text>
                                 <Icon style={styles.navIcon} name="chevron-right" size={23}/>
                             </View>
-                            {/* <View style={styles.partWrapper}>
-                                <View style={styles.partItem} >
-                                    <Image style={styles.itemImage} source={{uri:"http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg"}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>夏日炎凉、春风和睦、秋风爽、北国风光，雪飘万里</Text>
-                                </View>
-                                <View style={styles.partItem} >
-                                    <Image style={styles.itemImage} source={{uri:"http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg"}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>夏日炎凉、春风和睦、秋风爽、北国风光，雪飘万里</Text>
-                                </View>
-                                <View style={styles.partItem} >
-                                    <Image style={styles.itemImage} source={{uri:"http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg"}}></Image>
-                                    <Text style={styles.itemDes} numberOfLines = {2}>夏日炎凉、春风和睦、秋风爽、北国风光，雪飘万里</Text>
-                                </View>
-                            </View> */}
                             {
-                                this.state.recommendList.map((item, index) => (
+                                this.state.recommendListArr.map((item, index) => (
                                     <View style={styles.partWrapper} key={index}>
                                         {
                                             item.map((val, key) => 
                                                 (
                                                     <View style={styles.partItem} key={key}>
-                                                        <Image style={styles.itemImage} source={{uri:"http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg"}}></Image>
-                                                        <Text style={styles.itemDes} numberOfLines = {2}>夏日炎凉、春风和睦、秋风爽、北国风光，雪飘万里</Text>
+                                                        <Image style={styles.itemImage} source={{uri:val.picUrl}}></Image>
+                                                        <Text style={styles.itemDes} numberOfLines = {2}>{val.name}</Text>
                                                     </View>
                                                 )
                                             )
@@ -132,35 +130,26 @@ export default class AnchorStation extends React.Component {
                                 <Text style={styles.navSty}>最新音乐</Text>
                                 <Icon style={styles.navIcon} name="chevron-right" size={23}/>
                             </View>
-                            <View style={styles.partWrapper}>
-                            <View style={styles.partItem}>
-                                <Image style={styles.itemImage} source={{uri:"http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg"}}></Image>
-                                <Text style={styles.itemDes} numberOfLines = {2}>夏日炎凉、春风和睦、秋风爽、北国风光，雪飘万里</Text>
-                            </View>    
-                            <View style={styles.partItem}>
-                                <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/lbWdgPKiQouUTY1TPuP47g==/109951163692233243.jpg'}}></Image>
-                                <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
-                            </View>    
-                            <View style={styles.partItem}>
-                                <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/pEov1kba1LJ_bmv-5PCm0Q==/109951163694170445.jpg'}}></Image>
-                                <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
-                            </View>    
-                            </View>
-                            <View style={styles.partWrapper}>
-                            <View style={styles.partItem}>
-                                <Image style={styles.itemImage} source={{uri:"http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg"}}></Image>
-                                <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
-                            </View>    
-                            <View style={styles.partItem}>
-                                <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg'}}></Image>
-                                <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
-                            </View>    
-                            <View style={styles.partItem}>
-                                <Image style={styles.itemImage} source={{uri: 'http://p1.music.126.net/nj9Zxh1GsIETbmUiOgBCaA==/109951163694379364.jpg'}}></Image>
-                                <Text style={styles.itemDes} numberOfLines = {2}>this is item texthis is item texthis is item text</Text>
-                            </View>    
-                            </View>
+                            {
+                                this.state.newMusicListArr.map((item, index) => (
+                                    <View style={styles.partWrapper} key={index}>
+                                        {
+                                            item.map((val, key) => 
+                                                (
+                                                    <View style={styles.partItem} key={key}>
+                                                        <Image style={styles.itemImage} source={{uri:val.song.album.picUrl}}></Image>
+                                                        <Text style={styles.itemDes} numberOfLines = {2}>{val.name}</Text>
+                                                        <Text style={styles.songAuthor} numberOfLines = {1}>{val.song.artists[0].name}</Text>
+                                                    </View>
+                                                )
+                                            )
+                                        }
+                                    </View>
+                                    )
+                                )
+                            } 
                         </View>
+                        {/*主播电台*/}
                     </View>
                 </ScrollView>
             </View>
@@ -176,11 +165,14 @@ const styles = StyleSheet.create({
   },
   contentContainer:{
   },
+  contentListContainer:{
+      backgroundColor:'#fff',
+  },
   itemWrapper:{
     width: screenWidth,
-    paddingLeft:5,
     paddingRight:5,
     paddingTop:5,
+    marginBottom:20,
     backgroundColor: '#fff'
   },
   titleNav:{
@@ -188,7 +180,8 @@ const styles = StyleSheet.create({
     alignItems:'center',
     height:20,
     lineHeight:20,
-    marginBottom:5
+    marginBottom:5,
+    paddingLeft:5
   },
   navSty:{
     fontSize:15
@@ -198,11 +191,12 @@ const styles = StyleSheet.create({
   },
   partWrapper:{
     flexDirection:"row",
-    justifyContent:'space-around'
+    justifyContent:'flex-start',
   },
   partItem:{
     height: (screenWidth - 20) / 3 + 40,
     width: (screenWidth - 20) / 3,
+    marginLeft:5
   },
   itemImage:{
     // backgroundColor: 'red',
@@ -213,5 +207,10 @@ const styles = StyleSheet.create({
   itemDes:{
     paddingHorizontal:5,
     fontSize:12
+  },
+  songAuthor:{
+    paddingHorizontal:5,
+    fontSize:11,
+    color: '#ccc'
   }
 })

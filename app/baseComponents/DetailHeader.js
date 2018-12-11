@@ -1,9 +1,9 @@
-// 最新music
-import {PureComponent} from 'react'
+// 详情页的header
+import React, {PureComponent} from 'react'
 import {View, Text,StyleSheet,Image, Dimensions} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-export default class LatestMusic extends PureComponent {
-  constructor (props) {
+export default class DetailHeader extends React.PureComponent {
+  constructor (proos) {
     super(props)
     this.state = {}
   }
@@ -11,7 +11,7 @@ export default class LatestMusic extends PureComponent {
     return (
       <View style={styles.mainContainer}>
         <Icon style={styles.navIcon} name="chevron-left" size={23}/>
-        <Text>LatestMusic</Text>
+        <Text>DetailHeader</Text>
       </View>
     )
   }

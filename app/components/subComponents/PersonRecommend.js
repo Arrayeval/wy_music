@@ -48,6 +48,7 @@ export default class AnchorStation extends React.Component {
         this._getRecommendNewMusic()
     }
 
+    // 推荐歌单
     _getRecommendMusicListData = () => {
         FetchReq.get(ApiUrls.recommendList) 
         .then((res) => {
@@ -65,6 +66,7 @@ export default class AnchorStation extends React.Component {
         })
     }
 
+    // 最新music
     _getRecommendNewMusic = () => {
         FetchReq.get(ApiUrls.recommendNewMusic) 
         .then((res) => {
@@ -80,6 +82,11 @@ export default class AnchorStation extends React.Component {
         }).catch(err => {
             console.log(err)
         })
+    }
+
+    // go view page 
+    _goViewPage = (obj) => {
+        this.props.navigation.push(obj.path)
     }
 
     render () {
@@ -102,10 +109,10 @@ export default class AnchorStation extends React.Component {
                     <View style={styles.contentListContainer}>
                         {/*推荐歌单*/}
                         <View style={styles.itemWrapper}>
-                            <View style={styles.titleNav}>
-                                <Text style={styles.navSty} onClick={this._getRecommendMusicListData.bind(this)}>推荐歌单</Text>
+                            <TouchableOpacity  style={styles.titleNav} onPress={this._goViewPage.bind(this, {path:'RecommendMusicMenu'})}>
+                                <Text style={styles.navSty}>推荐歌单</Text>
                                 <Icon style={styles.navIcon} name="chevron-right" size={23}/>
-                            </View>
+                            </TouchableOpacity>
                             {
                                 this.state.recommendListArr.map((item, index) => (
                                     <View style={styles.partWrapper} key={index}>
@@ -126,10 +133,10 @@ export default class AnchorStation extends React.Component {
                         </View>
                         {/*最新音乐*/}
                         <View style={styles.itemWrapper}>
-                            <View style={styles.titleNav}>
+                            <TouchableOpacity  style={styles.titleNav} onPress={this._goViewPage.bind(this, {path:'LatestMusic'})}>
                                 <Text style={styles.navSty}>最新音乐</Text>
                                 <Icon style={styles.navIcon} name="chevron-right" size={23}/>
-                            </View>
+                            </TouchableOpacity>
                             {
                                 this.state.newMusicListArr.map((item, index) => (
                                     <View style={styles.partWrapper} key={index}>

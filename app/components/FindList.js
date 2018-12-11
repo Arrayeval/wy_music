@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react'
+import React from 'react'
 import {View, Text, TouchableOpacity,StyleSheet,Image, Dimensions} from 'react-native'
 import ScrollableTabView , {ScrollableTabBar} from 'react-native-scrollable-tab-view'
 
@@ -33,10 +33,9 @@ export default class FindList extends React.Component {
                         tabBarInactiveTextColor = {'#fff'}
                         scrollWithoutAnimation ={true}
                         locked={false}
-                        prerenderingSiblingsNumber={1}
-                    >
-                        <PersonRecommend key={pageConFig.tabViewArr[1].itemName} tabLabel = {pageConFig.tabViewArr[0].itemName}/>
-                        <AnchorStation key={pageConFig.tabViewArr[0].itemName}  tabLabel = {pageConFig.tabViewArr[1].itemName}/>
+                        prerenderingSiblingsNumber={1}>
+                        <PersonRecommend navigation={this.props.navigation} key={pageConFig.tabViewArr[1].itemName} tabLabel = {pageConFig.tabViewArr[0].itemName}/>
+                        <AnchorStation navigation={this.props.navigation} key={pageConFig.tabViewArr[0].itemName}  tabLabel = {pageConFig.tabViewArr[1].itemName}/>
                     </ScrollableTabView>
                 </View>
             </View>

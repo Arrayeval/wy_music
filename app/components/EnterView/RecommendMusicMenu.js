@@ -42,7 +42,7 @@ export default class RecommendMusicMenu extends React.Component {
             </View>
           </View>
         </View>
-
+        {/*select music*/}
         <View style={styles.classifyWrapper}>
             <TouchableOpacity style={styles.selectBtn}>
               <Text>韩语</Text>
@@ -188,7 +188,10 @@ const styles = StyleSheet.create({
   },
   classifyWrapper:{
     height:40,
+    width: screenWidth,
+    paddingHorizontal: 10,
     flexDirection:'row',
     alignItems: 'center',
+    justifyContent:'flex-start'
   }
 })

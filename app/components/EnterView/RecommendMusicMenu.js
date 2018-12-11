@@ -42,6 +42,7 @@ export default class RecommendMusicMenu extends React.Component {
             </View>
           </View>
         </View>
+
         <View style={styles.classifyWrapper}>
             <TouchableOpacity style={styles.selectBtn}>
               <Text>韩语</Text>
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
     width:50,
   },
   listHeaderWrapper:{
-    height:200,
+    height:190,
     justifyContent: 'center',
     alignItems:'center',
     position:'relative'
@@ -155,7 +156,7 @@ const styles = StyleSheet.create({
     fontSize:30,
   },
   imgWrapper:{
-    height:130,
+    height:150,
     paddingTop:25,
     paddingBottom:5,
     paddingLeft:10,
@@ -187,8 +188,7 @@ const styles = StyleSheet.create({
   },
   classifyWrapper:{
     height:40,
-    backgroundColor:'red',
     flexDirection:'row',
-    alignItems: 'center'
+    alignItems: 'center',
   }
 })

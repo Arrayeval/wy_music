@@ -45,11 +45,13 @@ export default class RecommendMusicMenu extends React.Component {
         {/*select music*/}
         <View style={styles.classifyWrapper}>
             <TouchableOpacity style={styles.selectBtn}>
-              <Text>韩语</Text>
+              <Text >韩语</Text>
             </TouchableOpacity>
-            <Text>华语</Text>
-            <Text>民谣</Text>
-            <Text>摇滚</Text>
+            <View style={styles.hotSelect}>
+              <Text style={styles.tabItem}>摇滚</Text>
+              <Text style={styles.tabItem}>华语</Text>
+              <Text style={styles.tabItem}>民谣</Text>
+            </View>
         </View>
       </View>
   }
@@ -193,5 +195,22 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     alignItems: 'center',
     justifyContent:'flex-start'
+  },
+  selectBtn:{
+    height:20,
+    width:55,
+    flexDirection:'row',
+    justifyContent:"center",
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius:10
+  },
+  hotSelect:{
+    flex:1,
+    flexDirection:'row',
+    justifyContent:'flex-end'
+  },
+  tabItem:{
+    marginLeft:5
   }
 })

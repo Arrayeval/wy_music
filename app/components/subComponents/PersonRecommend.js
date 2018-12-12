@@ -103,8 +103,7 @@ export default class AnchorStation extends React.Component {
                     }
                     style={styles.scrollViewStyle}
                     showsVerticalScrollIndicator={false}
-                    alwaysBounceHorizontal={true}
-                 >
+                    alwaysBounceHorizontal={true}>
                     <MidlePart MidleConfig = {this.state.midleConfig}/>
                     <View style={styles.contentListContainer}>
                         {/*推荐歌单*/}

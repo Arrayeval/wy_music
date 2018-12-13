@@ -36,6 +36,7 @@ export default class AnchorStation extends React.Component {
             newMusicListArr: []
         }
     }
+
     _onRefresh = () => {
         this.setState({refreshing: true});
         setTimeout(() => {
@@ -108,7 +109,7 @@ export default class AnchorStation extends React.Component {
                     <View style={styles.contentListContainer}>
                         {/*推荐歌单*/}
                         <View style={styles.itemWrapper}>
-                            <TouchableOpacity  style={styles.titleNav} onPress={this._goViewPage.bind(this, {path:'RecommendMusicMenu'})}>
+                            <TouchableOpacity activeOpacity = {0.8} style={styles.titleNav} onPress={this._goViewPage.bind(this, {path:'RecommendMusicMenu'})}>
                                 <Text style={styles.navSty}>推荐歌单</Text>
                                 <Icon style={styles.navIcon} name="chevron-right" size={23}/>
                             </TouchableOpacity>
@@ -125,14 +126,13 @@ export default class AnchorStation extends React.Component {
                                                 )
                                             )
                                         }
-                                    </View>
-                                    )
+                                    </View>)
                                 )
                             }  
                         </View>
                         {/*最新音乐*/}
                         <View style={styles.itemWrapper}>
-                            <TouchableOpacity  style={styles.titleNav} onPress={this._goViewPage.bind(this, {path:'LatestMusic'})}>
+                            <TouchableOpacity activeOpacity = {0.8}  style={styles.titleNav} onPress={this._goViewPage.bind(this, {path:'LatestMusic'})}>
                                 <Text style={styles.navSty}>最新音乐</Text>
                                 <Icon style={styles.navIcon} name="chevron-right" size={23}/>
                             </TouchableOpacity>
@@ -172,17 +172,17 @@ const styles = StyleSheet.create({
   contentContainer:{
   },
   contentListContainer:{
-      backgroundColor:'#fff',
+    backgroundColor:'#fff',
   },
   itemWrapper:{
     width: screenWidth,
     paddingRight:5,
     paddingTop:5,
     marginBottom:20,
-    backgroundColor: '#fff'
+    backgroundColor:'#fff'
   },
   titleNav:{
-    flexDirection: 'row',
+    flexDirection:'row',
     alignItems:'center',
     height:20,
     lineHeight:20,
@@ -217,6 +217,6 @@ const styles = StyleSheet.create({
   songAuthor:{
     paddingHorizontal:5,
     fontSize:11,
-    color: '#ccc'
+    color:'#ccc'
   }
 })

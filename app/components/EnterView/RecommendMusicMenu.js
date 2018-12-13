@@ -1,21 +1,42 @@
 // 推荐歌单
 import React from 'react'
-import {View,Text,StyleSheet,Image,ImageBackground,TouchableWithoutFeedback,Dimensions,FlatList,findNodeHandle,TouchableOpacity} from 'react-native'
-import { BlurView, VibrancyView } from 'react-native-blur'
+import {View,Text,StyleSheet,Image,TouchableWithoutFeedback,Dimensions,FlatList,findNodeHandle,TouchableOpacity} from 'react-native'
+import { BlurView } from 'react-native-blur'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import IconFeather from 'react-native-vector-icons/Feather'
+import ApiUrls from '../../apiUrl/index.js'
+import FetchReq from '../../utils/fetchReq'
+import {splitArr} from '../../utils/common'
 const {width: screenWidth, height: screenHeight} = Dimensions.get('window')
 export default class RecommendMusicMenu extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      viewRef:null
+      viewRefItem:null,
+      showBlur: false,
+      recommendListArr: []
     }
   }
 
   // 返回上一步
   _goBack = () => {
     this.props.navigation.pop()
+  }
+
+  // 推荐歌单
+  _getRecommendMusicListData = () => {
+    FetchReq.get(ApiUrls.recommendList) 
+    .then((res) => {
+        if (res.code === 200) {
+          if (res.result && res.result.length > 0) {
+            let _tmpArr = []
+            _tmpArr = splitArr(res.result, 2)
+            this.setState({recommendListArr: _tmpArr})
+          }
+        }
+    }).catch(err => {
+      console.log(err)
+    })
   }
 
   // 列表的头部
@@ -26,11 +47,15 @@ export default class RecommendMusicMenu extends React.Component {
           ref={(img) => {this.backgroundImage = img}}
           onLoadEnd={this._imageLoaded.bind(this)}
           source={{uri: "http://img5.imgtn.bdimg.com/it/u=602873054,3769467145&fm=200&gp=0.jpg"}}></Image>
-        <BlurView
-          style={styles.imageBlurSty}
-          viewRef={this.state.viewRef}
-          blurType="light"
-          blurAmount={20}/>
+        {
+          this.state.showBlur?
+          <BlurView
+            style={styles.imageBlurSty}
+            viewRef={this.state.viewRefItem}
+            blurType="light"
+            blurAmount={20}/>
+            : null
+        }
         {/*content*/}
         <View style={styles.imgWrapper}>
           <Image style={styles.imgSty} source={{uri: "http://img5.imgtn.bdimg.com/it/u=602873054,3769467145&fm=200&gp=0.jpg"}}/>
@@ -56,31 +81,44 @@ export default class RecommendMusicMenu extends React.Component {
       </View>
   }
 
+  // 列表尾部
   _listFooter = () => {
     return <View>
-      <Text>this is list footer</Text>
+      <Text style={styles.listFooter}>没有更多数据了</Text>
     </View>
   }
 
   // 渲染每一条数据
   _renderItem = (item) => {
-    var txt = '第' + item.index + '个' + ' title=' + item.item.title;
-    var bgColor = item.index % 2 == 0 ? 'red' : 'blue';
-    return <Text style={[{flex:1,height:100,backgroundColor:bgColor},styles.txt]}>{txt}</Text>
+    return <View style={styles.itemWraper}>
+      {
+        item.item.map((val, index) =>(
+          <View style={styles.itemBox} key={index}>
+            <View style={styles.imgBox}>
+              <Image style={styles.imageSty} source={{uri: val.picUrl}}></Image>
+            </View>
+            <Text style={styles.itemName} numberOfLines={2}>{val.name}</Text>
+          </View>
+        ))
+      }
+    </View>
   }
 
   // 列表item的唯一性
   _keyExtractor = (item, index) => index + ''
 
   _imageLoaded() {
-    this.setState({ viewRef: findNodeHandle(this.backgroundImage) });
+    this.setState({
+      showBlur: true,
+      viewRefItem: findNodeHandle(this.backgroundImage)
+    });
+  }
+
+  componentDidMount () {
+    this._getRecommendMusicListData()
   }
 
   render () {
-    var data = [];
-    for (var i = 0; i < 100; i++) {
-      data.push({key: i, title: i + ''});
-    }
     return (
       <View style={styles.mainContainer}>
         {/*header*/}
@@ -96,14 +134,16 @@ export default class RecommendMusicMenu extends React.Component {
           </TouchableWithoutFeedback>
         </View>
         {/*中间列表数据*/}
-        <View style={styles.centerListWrapper}>
-          <FlatList ref="flatList"
-            ListHeaderComponent={this._listHeader}
-            ListFooterComponent={this._listFooter}
-            keyExtractor={this._keyExtractor}
-            data={data}
-            renderItem={this._renderItem}>
-          </FlatList>
+        <FlatList ref="flatList"
+          ListHeaderComponent={this._listHeader}
+          ListFooterComponent={this._listFooter}
+          keyExtractor={this._keyExtractor}
+          data={this.state.recommendListArr}
+          renderItem={this._renderItem}>
+        </FlatList>
+        {/*模块分类*/}
+        <View style={styles.classifyWrapper}>
+
         </View>
       </View>
     )
@@ -111,6 +151,9 @@ export default class RecommendMusicMenu extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  mainContainer:{
+    marginBottom:40
+  },
   headerContainer: {
     flexDirection:'row',
     alignItems:'center',
@@ -155,7 +198,7 @@ const styles = StyleSheet.create({
     textAlign:'center',
     textAlignVertical:'center',
     color:'white',
-    fontSize:30,
+    fontSize:10,
   },
   imgWrapper:{
     height:150,
@@ -212,5 +255,36 @@ const styles = StyleSheet.create({
   },
   tabItem:{
     marginLeft:5
+  },
+  listFooter:{
+    height:30,
+    width: screenWidth,
+    textAlign:'center',
+    alignItems:'center',
+    color:'rgba(255,255,255,.8)',
+    fontSize:13
+  },
+  itemWraper:{
+    width: screenWidth,
+    flexDirection:'row',
+    justifyContent:'space-between',
+    paddingHorizontal:5
+  },
+  itemBox:{
+   width: (screenWidth - 15) / 2,
+   height: (screenWidth - 15) / 2 + 30,
+  },
+  imgBox:{
+    width: (screenWidth - 15) / 2,
+    height: (screenWidth - 15) / 2 ,
+  },
+  imageSty:{
+    width: (screenWidth - 15) / 2,
+    height: (screenWidth - 15) / 2 ,
+    borderRadius: 3
+  },
+  itemName:{
+    fontSize:12,
+    fontWeight: 'normal'
   }
 })

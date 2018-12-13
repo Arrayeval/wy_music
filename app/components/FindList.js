@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, TouchableOpacity,StyleSheet,Image, Dimensions} from 'react-native'
+import {View, Text,StyleSheet,Image, Dimensions} from 'react-native'
 import ScrollableTabView , {ScrollableTabBar} from 'react-native-scrollable-tab-view'
 
 import Search from '../baseComponents/Search'

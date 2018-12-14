@@ -1,8 +1,5 @@
-import React, {PureComponent} from 'react'
-import {
-  Image,
-  StyleSheet, 
-} from 'react-native'
+import React from 'react'
+import {StyleSheet} from 'react-native'
 
 import { createBottomTabNavigator  } from 'react-navigation'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -13,7 +10,6 @@ import Video from '../components/Video'
 import MyProfile from '../components/Account'
 import Friends from '../components/Friends'
 import Account from '../components/Account'
-
 
 export default MainTab = createBottomTabNavigator (
   {
@@ -103,16 +99,16 @@ export default MainTab = createBottomTabNavigator (
   }
 )
 const styles = StyleSheet.create({
-    navigatorTitle:{
-      fontSize:20,
-      color:'white',
-    },
-    navigator:{
-      backgroundColor:'#d81e06',
-    },
-    tabbarImage:{
-      width:25,
-      height:25,
-      marginBottom:-3,
-    },
-  })
+  navigatorTitle:{
+    fontSize:20,
+    color:'white',
+  },
+  navigator:{
+    backgroundColor:'#d81e06',
+  },
+  tabbarImage:{
+    width:25,
+    height:25,
+    marginBottom:-3,
+  },
+})

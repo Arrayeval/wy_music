@@ -87,7 +87,7 @@ export default class AnchorStation extends React.Component {
 
     // go view page 
     _goViewPage = (obj) => {
-        this.props.navigation.push(obj.path)
+        this.props.navigation.push(obj.path, {id: obj.id})
     }
 
     render () {
@@ -115,18 +115,22 @@ export default class AnchorStation extends React.Component {
                             </TouchableOpacity>
                             {
                                 this.state.recommendListArr.map((item, index) => (
-                                    <View style={styles.partWrapper} key={index}>
-                                        {
-                                            item.map((val, key) => 
-                                                (
-                                                    <View style={styles.partItem} key={key}>
-                                                        <Image style={styles.itemImage} source={{uri:val.picUrl}}></Image>
-                                                        <Text style={styles.itemDes} numberOfLines = {2}>{val.name}</Text>
-                                                    </View>
+                                        <View style={styles.partWrapper} key={index}>
+                                            {
+                                                item.map((val, key) => 
+                                                    (
+                                                        <TouchableOpacity activeOpacity = {0.8} key={key}
+                                                            onPress={this._goViewPage.bind(this, {path:'MusicMenuDetail', id: val.id})}>
+                                                            <View style={styles.partItem} >
+                                                                <Image style={styles.itemImage} source={{uri:val.picUrl}}></Image>
+                                                                <Text style={styles.itemDes} numberOfLines = {2}>{val.name}</Text>
+                                                            </View>
+                                                        </TouchableOpacity>
+                                                    )
                                                 )
-                                            )
-                                        }
-                                    </View>)
+                                            }
+                                        </View>
+                                    )
                                 )
                             }  
                         </View>
@@ -142,11 +146,13 @@ export default class AnchorStation extends React.Component {
                                         {
                                             item.map((val, key) => 
                                                 (
-                                                    <View style={styles.partItem} key={key}>
-                                                        <Image style={styles.itemImage} source={{uri:val.song.album.picUrl}}></Image>
-                                                        <Text style={styles.itemDes} numberOfLines = {2}>{val.name}</Text>
-                                                        <Text style={styles.songAuthor} numberOfLines = {1}>{val.song.artists[0].name}</Text>
-                                                    </View>
+                                                    <TouchableOpacity activeOpacity = {0.8} key={key}>
+                                                        <View style={styles.partItem}>
+                                                            <Image style={styles.itemImage} source={{uri:val.song.album.picUrl}}></Image>
+                                                            <Text style={styles.itemDes} numberOfLines = {2}>{val.name}</Text>
+                                                            <Text style={styles.songAuthor} numberOfLines = {1}>{val.song.artists[0].name}</Text>
+                                                        </View>
+                                                    </TouchableOpacity>
                                                 )
                                             )
                                         }

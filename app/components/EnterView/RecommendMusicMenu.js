@@ -91,18 +91,25 @@ export default class RecommendMusicMenu extends React.Component {
       <Text style={styles.listFooter}>{text}</Text>
     </View>
   }
+ 
+  // menu detail
+  _goMeunDetail = (obj) => {
+    this.props.navigation.push(obj.path, {id: obj.id})
+  }
 
   // 渲染每一条数据
   _renderItem = (item) => {
     return <View style={styles.itemWraper}>
       {
         item.item.map((val, index) =>(
-          <View style={styles.itemBox} key={index}>
-            <View style={styles.imgBox}>
-              <Image style={styles.imageSty} source={{uri: val.picUrl}}></Image>
+          <TouchableWithoutFeedback key={index} onPress={this._goMeunDetail.bind(this, {path: 'MusicMenuDetail', id: val.id})}>
+            <View style={styles.itemBox}>
+              <View style={styles.imgBox}>
+                <Image style={styles.imageSty} source={{uri: val.picUrl}}></Image>
+              </View>
+              <Text style={styles.itemName} numberOfLines={2}>{val.name}</Text>
             </View>
-            <Text style={styles.itemName} numberOfLines={2}>{val.name}</Text>
-          </View>
+          </TouchableWithoutFeedback>
         ))
       }
     </View>

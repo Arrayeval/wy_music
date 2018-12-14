@@ -17,9 +17,17 @@ http://www.mptab.cn:3001/artist/list
 ```
 ##### 2）react-navigation的导航使用技巧
 ```
-只要在react-navigation中注册过的组件内部都可以通过this.props.navigation.push(path)进行导航；
+a）只要在react-navigation中注册过的组件内部都可以通过this.props.navigation.push(path)进行导航；
 没有注册过的组件，可以使用props的形式传递。
 em:
 <PersonRecommend navigation={this.props.navigation} />
 然后在PersonRecommend中可以使用this.props.navigation.push(path)了
+
+b）路由之间的值传递
+  传值：
+    this.props.navigation.push(obj.path, {id: obj.id})
+    
+  取值：
+    const {navigation} = this.props
+    const id = navigation.getParam('id')
 ```

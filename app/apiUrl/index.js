@@ -6,6 +6,8 @@ const ApiUrls = {
   recommendIntro: baseConfig + 'related/playlist?id=1',
   // 推荐新音乐 http://www.mptab.cn:3001/personalized/newsong
   recommendNewMusic: baseConfig + 'personalized/newsong',
+  // 歌单详情detail?id=2510328199
+  musicMenuDetail: baseConfig + 'detail',  
   // 获取音乐的url song/url?id=405998841,33894312
   getMusicUrl: baseConfig + 'song/url'
 }

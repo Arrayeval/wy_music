@@ -14,7 +14,8 @@ export default class RecommendMusicMenu extends React.Component {
     this.state = {
       viewRefItem:null,
       showBlur: false,
-      recommendListArr: []
+      recommendListArr: [],
+      loadingData: true // 正在加载数据
     }
   }
 
@@ -28,6 +29,7 @@ export default class RecommendMusicMenu extends React.Component {
     FetchReq.get(ApiUrls.recommendList) 
     .then((res) => {
         if (res.code === 200) {
+          this.setState({loadingData: false})
           if (res.result && res.result.length > 0) {
             let _tmpArr = []
             _tmpArr = splitArr(res.result, 2)
@@ -35,6 +37,7 @@ export default class RecommendMusicMenu extends React.Component {
           }
         }
     }).catch(err => {
+      this.setState({loadingData: false})
       console.log(err)
     })
   }
@@ -83,8 +86,9 @@ export default class RecommendMusicMenu extends React.Component {
 
   // 列表尾部
   _listFooter = () => {
+    let text = this.state.loadingData ? '正在加载数据！' : '没有更多数据了'
     return <View>
-      <Text style={styles.listFooter}>没有更多数据了</Text>
+      <Text style={styles.listFooter}>{text}</Text>
     </View>
   }
 
@@ -141,10 +145,6 @@ export default class RecommendMusicMenu extends React.Component {
           data={this.state.recommendListArr}
           renderItem={this._renderItem}>
         </FlatList>
-        {/*模块分类*/}
-        <View style={styles.classifyWrapper}>
-
-        </View>
       </View>
     )
   }
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     width: screenWidth,
     textAlign:'center',
     alignItems:'center',
-    color:'rgba(255,255,255,.8)',
+    color:'rgba(255,255,255,.5)',
     fontSize:13
   },
   itemWraper:{
